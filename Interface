@@ -1,0 +1,63 @@
+// Tutorial Interface
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class teste {
+    JButton Botao1 = new JButton("Botao 1");
+    JButton Botao2 = new JButton("Botao 2");
+    JButton Botao3 = new JButton("Botao 3");
+    String Texto = "";
+    JTextField Visor = new JTextField(6);
+
+    public static void main(String[] args) {
+        new teste();
+    }
+
+    public teste() {
+        JFrame Janela = new JFrame();
+        Janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Janela.setMinimumSize(new Dimension(200, 300));
+        Janela.setSize(1280, 720);
+
+        JPanel Painel = new JPanel();
+        Painel.setLayout(new BoxLayout(Painel, BoxLayout.PAGE_AXIS));
+
+
+        BtnHandler ClicarBotao = new BtnHandler();
+        Botao1.addActionListener(ClicarBotao);
+        Botao2.addActionListener(ClicarBotao);
+        Botao3.addActionListener(ClicarBotao);
+
+        Visor.setMaximumSize(new Dimension(200, 40));
+
+
+        Painel.add(Botao1);
+        Painel.add(Botao2);
+        Painel.add(Botao3);
+        Painel.add(Visor);
+
+        Janela.add(Painel);
+        Janela.setVisible(true);
+    }
+
+    class BtnHandler implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+            JButton selectedBtn = (JButton) e.getSource();
+            if (selectedBtn == Botao1) {
+                Texto = Botao1.getText();
+            } else if (selectedBtn == Botao2) {
+                Texto = Botao2.getText();
+            } else if (selectedBtn == Botao3) {
+                Texto = Botao3.getText();
+            }
+
+            Texto();
+        }
+    }
+
+    public void Texto(){
+        Visor.setText(Texto);
+    }
+}
