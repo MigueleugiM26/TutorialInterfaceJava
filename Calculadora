@@ -1,0 +1,307 @@
+// Calculadora
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class main extends JFrame {
+    // ============================== VARIÁVEIS GLOBAIS ==============================
+    JButton Soma, Subtracao, Divisao, Multiplicacao, Limpar, Apagar, Resultado, Ponto, Inversor, Potencia;
+    JButton Numero[];
+    JTextField Saida;
+    String Numero1, Numero2, Operador;
+
+
+
+
+
+    // ============================== GUI DA CALCULADORA ==============================
+    public main() {
+        // ============================== CRIAR LAYOUT GUI ==============================
+        super("Calculadora Java");
+        JPanel Painel = new JPanel();
+        Painel.setLayout(new BoxLayout(Painel, BoxLayout.PAGE_AXIS));
+
+        JPanel Linha1 = new JPanel();
+        JPanel Linha2 = new JPanel();
+        JPanel Linha3 = new JPanel();
+        JPanel Linha4 = new JPanel();
+        JPanel Linha5 = new JPanel();
+
+
+
+
+
+        // ============================== DEFINIR OBJETOS GUI ==============================
+        Numero2 = "";
+        Numero1 = "";
+
+        Saida = new JTextField(16);
+        Subtracao = new JButton("-");
+        Soma = new JButton("+");
+        Divisao = new JButton("/");
+        Multiplicacao = new JButton("*");
+        Ponto = new JButton(".");
+        Resultado = new JButton("=");
+        Limpar = new JButton("C");
+        Apagar = new JButton("D");
+        Potencia = new JButton("^");
+        Inversor = new JButton("!");
+
+        NumberBtnHandler numBtnHandler = new NumberBtnHandler();
+        OtherBtnHandler otherBtnHandler = new OtherBtnHandler();
+        OperadorBtnHandler opBtnHandler = new OperadorBtnHandler();
+
+        Numero = new JButton[11];
+        Numero[10] = Ponto;
+        for (int count = 0; count < Numero.length - 1; count++) {
+            Numero[count] = new JButton(String.valueOf(count));
+            Numero[count].setFont(new Font("Monospaced", Font.BOLD, 22));
+            Numero[count].addActionListener(numBtnHandler);
+        }
+
+
+
+
+
+        // ============================== DEFINIR ESTILO OBJETOS ==============================
+        Ponto.setFont(new Font("Monospaced", Font.BOLD, 22));
+        Resultado.setFont(new Font("Monospaced", Font.BOLD, 22));
+        Soma.setFont(new Font("Monospaced", Font.BOLD, 22));
+        Subtracao.setFont(new Font("Monospaced", Font.BOLD, 22));
+        Divisao.setFont(new Font("Monospaced", Font.BOLD, 22));
+        Multiplicacao.setFont(new Font("Monospaced", Font.BOLD, 22));
+        Limpar.setFont(new Font("Monospaced", Font.BOLD, 22));
+        Apagar.setFont(new Font("Monospaced", Font.BOLD, 22));
+        Potencia.setFont(new Font("Monospaced", Font.BOLD, 22));
+        Inversor.setFont(new Font("Monospaced", Font.BOLD, 22));
+
+        Saida.setMaximumSize(new Dimension(185, 40));
+        Saida.setFont(new Font("Monospaced", Font.BOLD, 27));
+        Saida.setDisabledTextColor(new Color(0, 0, 0));
+        Saida.setMargin(new Insets(0, 5, 0, 0));
+        Saida.setText("0");
+
+        Linha1.setLayout(new BoxLayout(Linha1, BoxLayout.LINE_AXIS));
+        Linha2.setLayout(new BoxLayout(Linha2, BoxLayout.LINE_AXIS));
+        Linha3.setLayout(new BoxLayout(Linha3, BoxLayout.LINE_AXIS));
+        Linha4.setLayout(new BoxLayout(Linha4, BoxLayout.LINE_AXIS));
+        Linha5.setLayout(new BoxLayout(Linha5, BoxLayout.LINE_AXIS));
+
+
+
+
+
+        // ============================== ADICIONAR FUNÇÃO A BOTÕES ==============================
+        Ponto.addActionListener(numBtnHandler);
+        Apagar.addActionListener(otherBtnHandler);
+        Limpar.addActionListener(otherBtnHandler);
+        Resultado.addActionListener(otherBtnHandler);
+
+        Multiplicacao.addActionListener(opBtnHandler);
+        Soma.addActionListener(opBtnHandler);
+        Subtracao.addActionListener(opBtnHandler);
+        Divisao.addActionListener(opBtnHandler);
+        Potencia.addActionListener(opBtnHandler);
+
+
+
+
+
+        // ============================== ADICIONAR TUDO NA GUI ==============================
+        // Linha 1
+        Linha1.add(Potencia);
+        Linha1.add(Limpar);
+        Linha1.add(Apagar);
+        Linha1.add(Divisao);
+
+        // Linha 2
+        Linha2.add(Numero[7]);
+        Linha2.add(Numero[8]);
+        Linha2.add(Numero[9]);
+        Linha2.add(Multiplicacao);
+
+        // Linha 3
+        Linha3.add(Numero[4]);
+        Linha3.add(Numero[5]);
+        Linha3.add(Numero[6]);
+        Linha3.add(Subtracao);
+
+        // Linha 4
+        Linha4.add(Numero[1]);
+        Linha4.add(Numero[2]);
+        Linha4.add(Numero[3]);
+        Linha4.add(Soma);
+
+        // Linha 5
+        Linha5.add(Inversor);
+        Linha5.add(Numero[0]);
+        Linha5.add(Ponto);
+        Linha5.add(Resultado);
+
+
+
+
+
+        // ============================== DEFINIR ESTILO GUI ==============================
+        Painel.setLayout(new BoxLayout(Painel, BoxLayout.PAGE_AXIS));
+        Painel.add(Saida);
+        Painel.add(Box.createRigidArea(new Dimension(0, 5)));
+        Painel.add(Linha1);
+        Painel.add(Linha2);
+        Painel.add(Linha3);
+        Painel.add(Linha4);
+        Painel.add(Linha5);
+
+        this.add(Painel);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
+        this.setSize(205, 280);
+    }
+
+    public static void main(String[] args) {
+        new main();
+    }
+
+
+
+
+
+    // ============================== APAGAR UM NÚMERO ==============================
+    public void Apagar() {
+        if (Numero2.length() > 0) {
+            Numero2 = Numero2.substring(0, Numero2.length() - 1);
+        }
+    }
+
+    // ============================== LIMPAR TODOS OS NÚMEROS ==============================
+    public void Limpar() {
+        Numero2 = "";
+        Numero1 = "";
+        Operador = null;
+    }
+
+    // ============================== ATUALIZAR A TELA ==============================
+    public void Atualizar() {
+        Saida.setText(Numero2);
+    }
+
+    // ============================== ADICIONAR CARACTERES NA STRING DE CALCULO ==============================
+    public void IncluirSaida(String num) {
+        if (num.equals(".") && Numero2.contains(".")) {
+            return;
+        }
+        Numero2 += num;
+    }
+
+    // ============================== ESCOLHER OPERADOR NA CALCULADORA ==============================
+    public void EscolherOperador(String newOperador) {
+        if (Numero2.isEmpty()) {
+            Operador = newOperador;
+            return;
+        }
+
+        if (!Numero1.isEmpty()) {
+            Calcular();
+        }
+
+        Operador = newOperador;
+        Numero1 = Numero2;
+        Numero2 = "";
+    }
+
+    // ============================== REALIZAR CALCULOS ==============================
+    public void Calcular() {
+        if (Numero1.length() < 1 || Numero2.length() < 1) {
+            return;
+        }
+        double result = 0.0;
+        double num1 = Double.parseDouble(Numero1);
+        double num2 = Double.parseDouble(Numero2);
+        switch (Operador) {
+            case "*":
+                result = num1 * num2;
+                break;
+            case "+":
+                result = num1 + num2;
+                break;
+            case "-":
+                result = num1 - num2;
+                break;
+            case "/":
+                result = num1 / num2;
+                break;
+            case "^":
+                result = Math.pow(num1, num2);
+                break;
+            default:
+                break;
+        }
+        Numero2 = String.valueOf(result);
+        Operador = null;
+        Numero1 = "";
+
+        ProcessarNumero();
+    }
+
+    // ============================== AJEITAR PONTUAÇÃO (INT VS FLOAT) ==============================
+    public void ProcessarNumero() {
+        if (Numero2.length() > 0) {
+            String integerPart = Numero2.split("\\.")[0];
+            String decimalPart = Numero2.split("\\.")[1];
+            if (decimalPart.equals("0")) {
+                Numero2 = integerPart;
+            }
+        }
+    }
+
+
+
+
+
+    // ============================== FUNÇÕES DOS BOTÕES ==============================
+    private class NumberBtnHandler implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            JButton selectedBtn = (JButton) e.getSource();
+            for (JButton btn : Numero) {
+                if (selectedBtn == btn) {
+                    IncluirSaida(btn.getText());
+                    Atualizar();
+                }
+            }
+        }
+    }
+
+    private class OperadorBtnHandler implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            JButton selectedBtn = (JButton) e.getSource();
+            if (selectedBtn == Multiplicacao) {
+                EscolherOperador(Multiplicacao.getText());
+            } else if (selectedBtn == Soma) {
+                EscolherOperador(Soma.getText());
+            } else if (selectedBtn == Subtracao) {
+                EscolherOperador(Subtracao.getText());
+            } else if (selectedBtn == Divisao) {
+                EscolherOperador(Divisao.getText());
+            }
+            else if (selectedBtn == Potencia) {
+                EscolherOperador(Potencia.getText());
+            }
+            Atualizar();
+        }
+    }
+
+    private class OtherBtnHandler implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            JButton selectedBtn = (JButton) e.getSource();
+            if (selectedBtn == Apagar) {
+                Apagar();
+            } else if (selectedBtn == Limpar) {
+                Limpar();
+            } else if (selectedBtn == Resultado) {
+                Calcular();
+            }
+            Atualizar();
+        }
+    }
+}
